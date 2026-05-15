@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>S Chat</title>
+    <link rel="stylesheet" href="C:\Users\User\Downloads\styles.css">
+    <link rel="stylesheet" href="C:\Users\User\Downloads\app.js">
+     <link rel="stylesheet" href="C:\Users\User\Downloads\auth.js">
+     <link rel="stylesheet" href="C:\Users\User\Downloads\chat.js">
+     <link rel="stylesheet" href="C:\Users\User\Downloads\server.js">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+</head>
+<body>
+    <!-- Экран авторизации -->
+    <div id="auth-screen" class="screen active">
+        <div class="auth-container">
+            <div class="auth-header">
+                <h1>S Chat</h1>
+                <p>The real breakthrough</p>
+            </div>
+            
+            <div class="auth-form">
+                <div class="form-group">
+                    <input type="text" id="login-username" placeholder="Userame" required>
+                </div>
+                <div class="form-group">
+                    <input type="password" id="login-password" placeholder="Password" required>
+                </div>
+                <button id="login-btn" class="btn-primary">Log In</button>
+                <button id="show-register" class="btn-secondary">Create free account</button>
+            </div>
+
+            <div class="auth-form register-form" style="display: none;">
+                <div class="form-group">
+                    <input type="text" id="register-username" placeholder="Username" required>
+                </div>
+                <div class="form-group">
+                    <input type="email" id="register-email" placeholder="Email" required>
+                </div>
+                <div class="form-group">
+                    <input type="password" id="register-password" placeholder="Password" required>
+                </div>
+                <div class="form-group">
+                    <input type="text" id="register-fullname" placeholder="Full name" required>
+                </div>
+                <button id="register-btn" class="btn-primary">Create free account</button>
+                <button id="show-login" class="btn-secondary">Already have an account</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Основной интерфейс -->
+    <div id="main-screen" class="screen">
+        <div class="phone-mockup">
+            <div class="header active" id="header-main">
+                <i class="fa-solid fa-bars icon" id="sidebar-toggle"></i>
+                <h2>SChat</h2>
+                <i class="fa-solid fa-magnifying-glass icon" id="search-toggle"></i>
+            </div>
+
+            <div class="content-wrapper">
+                <!-- Главный экран -->
+                <div id="screen-main" class="content-container active">
+                    <div class="stories-container">
+                        <div class="story-item">
+                            <div class="story-ring">
+                                <div class="story-plus">
+                                    <i class="fa-solid fa-plus"></i>
+                                </div>
+                            </div>
+                            <span class="story-name">My story</span>
+                        </div>
+                    </div>
+                    
+                    <div class="chat-list-tabs">
+                        <div class="chat-list-tab active" data-tab="all">All</div>
+                        <div class="chat-list-tab" data-tab="personal">Private</div>
+                        <div class="chat-list-tab" data-tab="groups">Groups</div>
+                    </div>
+                    
+                    <div class="search-input-container" id="search-container" style="display: none;">
+                        <div class="search-box">
+                            <i class="fa-solid fa-magnifying-glass"></i>
+                            <input type="text" class="search-input" id="chat-search" placeholder="Chats search">
+                        </div>
+                    </div>
+                    
+                    <ul class="chat-list" id="chat-list">
+                        <!-- Чаты будут загружены динамически -->
+                    </ul>
+                </div>
+
+                <!-- Экран чата -->
+                <div id="screen-chat" class="content-container">
+                    <div class="chat-header">
+                        <i class="fa-solid fa-arrow-left icon" id="back-to-chats"></i>
+                        <div class="chat-header-info">
+                            <h3 id="chat-with-name">Username</h3>
+                            <span id="chat-status">online</span>
+                        </div>
+                        <i class="fa-solid fa-ellipsis-vertical icon"></i>
+                    </div>
+                    
+<div class="chat-content" id="chat-messages">
+    <div id="loading-messages" class="loading-indicator">
+        <div class="spinner"></div>
+        <span>loading...</span>
+    </div>
+</div>
+                    
+<div class="chat-input-container">
+    <i class="fa-solid fa-paperclip icon"></i>
+    <input type="text" class="chat-input-field" id="message-input" placeholder="Message">
+    <button id="send-message" class="send-button">
+        <i class="fa-solid fa-paper-plane"></i>
+    </button>
+</div>
+                </div>
+
+                <!-- Профиль -->
+                
+<div id="screen-profile" class="content-container">
+    <div class="profile-header">
+        <i class="fa-solid fa-arrow-left icon" id="back-from-profile"></i>
+        <h2>Profile</h2>
+    </div>
+    
+    <div class="settings-section">
+        <div class="profile-header">
+            <div class="profile-pic" id="profile-avatar">?</div>
+            <div class="profile-info">
+                <h2 id="profile-fullname">Loading...</h2>
+                <p id="profile-status" class="status-online">в сети</p>
+            </div>
+        </div>
+        
+        <ul class="settings-section">
+            <li class="settings-list-item">
+                <div class="profile-list-item-left">
+                    <h4 id="profile-phone">No number</h4>
+                    <p>Phone number</p>
+                </div>
+            </li>
+            <li class="settings-list-item">
+                <div class="profile-list-item-left">
+                    <h4 id="profile-username">@username</h4>
+                    <p>Username</p>
+                </div>
+            </li>
+            <li class="settings-list-item">
+                <div class="profile-list-item-left">
+                    <h4>О себе</h4>
+                    <p id="profile-bio">No info</p>
+                </div>
+            </li>
+            <li class="settings-list-item" id="edit-profile-btn">
+                <i class="fa-solid fa-pencil icon"></i>
+                <span>Edit profile</span>
+            </li>
+        </ul>
+    </div>
+    
+    <div class="settings-section">
+        <div class="settings-list-item" id="logout-btn">
+            <i class="fa-solid fa-right-from-bracket icon"></i>
+            <span>Log out</span>
+        </div>
+    </div>
+</div>
+            </div>
+
+            <!-- Боковое меню -->
+            <div id="sidebar" class="sidebar">
+                <div class="sidebar-header">
+                    <div class="sidebar-profile-pic" id="sidebar-avatar">ИИ</div>
+                    <div class="profile-info">
+                        <h4 id="sidebar-fullname">Иван Иванов</h4>
+                        <p id="sidebar-username">@alex_nkr</p>
+                    </div>
+                </div>
+                
+                <ul class="sidebar-list">
+                    <li class="sidebar-list-item" id="sidebar-profile">
+                        <i class="fa-regular fa-user icon"></i>
+                        <span>My profile</span>
+                    </li>
+                    <li class="sidebar-list-item" id="create-group">
+                        <i class="fa-solid fa-users icon"></i>
+                        <span>Create group</span>
+                    </li>
+                    <li class="sidebar-list-item" id="contacts">
+                        <i class="fa-solid fa-address-book icon"></i>
+                        <span>Contacts</span>
+                    </li>
+                    <li class="sidebar-list-item" id="settings">
+                        <i class="fa-solid fa-cog icon"></i>
+                        <span>Settings</span>
+                    </li>
+                </ul>
+            </div>
+
+            <div id="sidebar-overlay" class="sidebar-overlay"></div>
+        </div>
+    </div>
+    
+    <!-- Отладочная информация (можно удалить после тестирования) -->
+<div id="debug-info" style="position: fixed; bottom: 10px; left: 10px; background: rgba(0,0,0,0.8); color: white; padding: 10px; border-radius: 5px; font-size: 12px; display: none;">
+    <div>WebSocket: <span id="ws-status">Disconnected</span></div>
+    <div>User: <span id="user-id">-</span></div>
+    <div>Current Chat: <span id="current-chat-id">-</span></div>
+</div>
+
+<script>
+// Функция для отладки
+function toggleDebug() {
+    const debug = document.getElementById('debug-info');
+    debug.style.display = debug.style.display === 'none' ? 'block' : 'none';
+}
+
+// Обновление отладочной информации
+function updateDebugInfo() {
+    document.getElementById('user-id').textContent = auth?.getCurrentUser()?.id || '-';
+    document.getElementById('current-chat-id').textContent = chatManager?.currentChat?.id || '-';
+    document.getElementById('ws-status').textContent = chatManager?.socket?.readyState === 1 ? 'Connected' : 'Disconnected';
+}
+
+setInterval(updateDebugInfo, 1000);
+
+// Для тестирования - отображаем отладку по тройному клику
+let clickCount = 0;
+document.addEventListener('click', () => {
+    clickCount++;
+    if (clickCount >= 3) {
+        toggleDebug();
+        clickCount = 0;
+    }
+    setTimeout(() => { clickCount = 0; }, 1000);
+});
+</script>
+
+    <script src="auth.js"></script>
+    <script src="chat.js"></script>
+    <script src="app.js"></script>
+</body>
+</html>
